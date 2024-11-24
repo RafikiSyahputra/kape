@@ -2,6 +2,9 @@
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Models\{transaksi, DataBank, Bank};
+use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 Route::get('/', 'FrontController@index');
 
@@ -51,7 +54,19 @@ Route::middleware('auth')->group(function () {
         Route::put('set-target-laundry/{id}', 'Admin\SettingsController@set_target_laundry')->name('set-target.update');
         Route::post('add-bank', 'Admin\SettingsController@bank')->name('setting.bank');
         Route::put('set-notif/{id}', 'Admin\SettingsController@notif')->name('set-notif.update');
+        Route::get("/deleteRekening/{id}", function ($id) {
 
+            try {
+                //code...
+                $bank =   DataBank::destroy($id);
+                return back()->with("success","berhasil menghapus rekening");
+            } catch (\Throwable $th) {
+                return back()->with("error","Gagal menghapus rekening");
+            }
+
+
+
+        });
         // Profile
         Route::get('profile-admin/{id}', 'Admin\AdminController@profile');
         Route::get('profile-admin-edit', 'Admin\AdminController@edit_profile');
@@ -111,5 +126,21 @@ Route::middleware('auth')->group(function () {
         // Profile
         Route::get('me', 'Customer\ProfileController@index');
         Route::put('me/{id}', 'Customer\ProfileController@updateProfile');
+        Route::get('cetak-invoice/{id}/print', 'Karyawan\InvoiceController@cetakinvoiceCustomer');
+
+        // Invoice
+        Route::get('invoice/{id}', function ($id): View {
+
+            $invoice = transaksi::with('price')
+                ->where('id', $id)
+                ->get();
+
+            $data = transaksi::with('customers', 'user')
+                ->where('id', $id)
+                ->first();
+
+            $bank = DataBank::get();
+            return view("customer.invoice", compact("invoice", "data", "bank"));
+        });
     });
 });

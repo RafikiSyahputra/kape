@@ -46,4 +46,21 @@ class InvoiceController extends Controller
         $pdf = PDF::loadView('karyawan.laporan.cetak', compact('invoice', 'data', 'bank'))->setPaper('a4', 'landscape');
         return $pdf->stream();
     }
+
+
+    public function cetakinvoiceCustomer(Request $request)
+    {
+        $invoice = transaksi::with('price')
+            ->where('id', $request->id)
+            ->get();
+
+        $data = transaksi::with('customers', 'user')
+            ->where('id', $request->id)
+            ->first();
+
+        $bank = DataBank::get();
+
+        $pdf = PDF::loadView('karyawan.laporan.cetak', compact('invoice', 'data', 'bank'))->setPaper('a4', 'landscape');
+        return $pdf->stream();
+    }
 }

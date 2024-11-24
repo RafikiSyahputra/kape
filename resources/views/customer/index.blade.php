@@ -85,7 +85,7 @@
                                     <th>Status Pembayaran</th>
                                     <th>Jenis Laundry</th>
                                     <th>Total</th>
-                                    {{-- <th>Action</th> --}}
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -110,9 +110,11 @@
                                         </td>
                                         <td> {{ $transaksis->price->jenis ?? 'Jenis Tidak Tersedia' }} </td>
                                         <td> {{ Rupiah::getRupiah($transaksis->harga_akhir) }} </td>
-                                        {{-- <td>
-                        <a href="" class="btn btn-sm btn-info">Detail</a>
-                      </td> --}}
+                                        <td>
+                                            @if ($transaksis->status_payment == 'Success')
+                                                <a href="/invoice/{{$transaksis->id}}" class="btn btn-sm btn-info">Invoice</a>
+                                            @endif
+                                        </td>
                                     </tr>
                                 @endforeach
                             </tbody>

@@ -159,16 +159,16 @@
                                                 </div>
 
                                                 <!--
-                                  <div class="col-md-4">
-                                    <div class="form-group">
-                                      <div class="controls">
-                                        <label for="Image Hero">Image Hero</label>
-                                        <input type="file" name="img_hero" class="form-control" placeholder="Username No Telp">
-                                        <small class="text-warning">Recomendes Image size 1200p x 400p</small>
-                                      </div>
-                                    </div>
-                                  </div>
-                                    -->
+                                              <div class="col-md-4">
+                                                <div class="form-group">
+                                                  <div class="controls">
+                                                    <label for="Image Hero">Image Hero</label>
+                                                    <input type="file" name="img_hero" class="form-control" placeholder="Username No Telp">
+                                                    <small class="text-warning">Recomendes Image size 1200p x 400p</small>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                                -->
 
                                                 <div class="col-12 d-flex flex-sm-row flex-column justify-content-start">
                                                     <button type="submit"
@@ -286,8 +286,13 @@
                                                 @else
                                                     @foreach ($databank as $bank)
                                                         <div class="col-md-4">
-                                                            <a data-toggle="modal" data-target="#editpayment">
-                                                                <div class="card bg-danger">
+                                                                <div class="card bg-danger relative">
+                                                                    <a class="shadow" style="position: absolute; right:-10px;top:-10px;border-radius:50%;padding:5px;background-color:white;" onclick="confirmDelete('Hapus Rekening Ini?',{{$bank->id}})">
+                                                                        <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24">
+                                                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18 17.94 6M18 18 6.06 6"/>
+                                                                          </svg>
+
+                                                                        </a>
                                                                     <div class="card-body text-center">
                                                                         <div class="card-title text-white">
                                                                             {{ $bank->nama_bank }}
@@ -299,7 +304,6 @@
                                                                             class="text-white">{{ $bank->nama_pemilik }}</small>
                                                                     </div>
                                                                 </div>
-                                                            </a>
                                                         </div>
                                                     @endforeach
 
@@ -435,11 +439,30 @@
                 </div>
             </div>
         </section>
+
+        <script>
+
+            const confirmDelete =(title,id)=>{
+
+               const conf = confirm(title)
+               console.log(conf)
+
+               if (conf) {
+
+                location.href= `/deleteRekening/${id}`
+
+               }
+            }
+        </script>
         @include('modul_admin.setting.modal')
     </div>
 @endsection
 @section('scripts')
+
+
     <script>
+
+
         @if (count($errors) > 0)
             $(function() {
                 $('#addpayment').modal('show');
